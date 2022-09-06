@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{C36AAC
 		docker\.dockerignore = docker\.dockerignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyObserver.DAL", "src\CurrencyObserver.DAL\CurrencyObserver.DAL.csproj", "{BE9A778C-397D-479D-B344-FED23D0FAC39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,13 @@ Global
 		{D57F3183-5963-4A3E-A959-82674897C41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D57F3183-5963-4A3E-A959-82674897C41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D57F3183-5963-4A3E-A959-82674897C41B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE9A778C-397D-479D-B344-FED23D0FAC39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE9A778C-397D-479D-B344-FED23D0FAC39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE9A778C-397D-479D-B344-FED23D0FAC39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE9A778C-397D-479D-B344-FED23D0FAC39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D57F3183-5963-4A3E-A959-82674897C41B} = {E01363AF-F381-469D-9BAE-6C42D05AC731}
+		{BE9A778C-397D-479D-B344-FED23D0FAC39} = {E01363AF-F381-469D-9BAE-6C42D05AC731}
 	EndGlobalSection
 EndGlobal

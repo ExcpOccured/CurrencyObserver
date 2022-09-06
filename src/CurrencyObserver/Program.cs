@@ -1,6 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
+using CurrencyObserver;
+
+var builder = Host.CreateDefaultBuilder(args)
+    .ConfigureWebHostDefaults(hostBuilder =>
+    {
+        hostBuilder.UseStartup<Startup>();
+        hostBuilder.SuppressStatusMessages(true);
+    });
+
 var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
-
 app.Run();
