@@ -1,4 +1,6 @@
-﻿namespace CurrencyObserver;
+﻿using CurrencyObserver.DAL.Extensions;
+
+namespace CurrencyObserver;
 
 public class Startup
 {
@@ -13,6 +15,8 @@ public class Startup
     {
         services.AddMvc();
         services.AddRouting();
+        
+        services.AddInternalDataAccessLayer(Configuration);
     }
 
     public void Configure(
