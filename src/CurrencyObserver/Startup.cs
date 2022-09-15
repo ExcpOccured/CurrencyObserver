@@ -15,6 +15,7 @@ public class Startup
     {
         services.AddMvc();
         services.AddRouting();
+        services.AddLogging();
         
         services.AddInternalDataAccessLayer(Configuration);
     }

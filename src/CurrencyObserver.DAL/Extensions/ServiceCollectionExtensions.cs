@@ -11,10 +11,8 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services, 
         IConfiguration configuration)
     {
-        configuration.GetSection(CbrClientOptions.Section).Bind(new CbrClientOptions());
-        
+        services.Configure<CbrClientOptions>(configuration.GetSection(CbrClientOptions.Section));
+        services.AddHttpClient();
         services.AddSingleton<ICbrClient, CbrClient>();
-
-        services.AddHttpClient<ICbrClient, CbrClient>();
     }
 }

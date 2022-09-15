@@ -1,11 +1,24 @@
-using CurrencyObserver;
+namespace CurrencyObserver;
 
-var builder = Host.CreateDefaultBuilder(args)
-    .ConfigureWebHostDefaults(hostBuilder =>
+public static class Program
+{
+    private const string SettingsFile = "appsettings.json";
+    public static void Main(string[] args)
     {
-        hostBuilder.UseStartup<Startup>();
-        hostBuilder.SuppressStatusMessages(true);
-    });
+        CreateHostBuilder(args).Build().Run();
+    }
 
-var app = builder.Build();
-app.Run();
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(hostBuilder =>
+            {
+                hostBuilder.UseStartup<Startup>();
+                hostBuilder.SuppressStatusMessages(true);
+            })
+            .ConfigureAppConfiguration(app =>
+            {
+                app.AddJsonFile(SettingsFile);
+            });
+    }
+}
