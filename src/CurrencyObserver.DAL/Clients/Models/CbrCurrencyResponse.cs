@@ -1,22 +1,34 @@
-﻿using System.Xml.Serialization;
+﻿using System.Globalization;
+using System.Xml.Serialization;
+using static System.Double;
 
 namespace CurrencyObserver.DAL.Clients.Models;
 
-[XmlRoot(ElementName="Valute")]
+[XmlRoot(ElementName = "Valute")]
 public class CbrCurrencyResponse
 {
-    [XmlElement(ElementName="NumCode")]
+    [XmlElement(ElementName = "NumCode")] 
     public string NumCode { get; set; } = null!;
 
-    [XmlElement(ElementName="CharCode")]
+    [XmlElement(ElementName = "CharCode")] 
     public string CharCode { get; set; } = null!;
 
-    [XmlElement(ElementName="Nominal")]
+    [XmlElement(ElementName = "Nominal")] 
     public string Nominal { get; set; } = null!;
-    
-    [XmlElement(ElementName="Value")]
-    public double Value { get; set; }
-    
-    [XmlAttribute(AttributeName="ID")]
+
+    [XmlIgnore] public double Value { get; set; }
+
+    [XmlElement(ElementName = "Value")]
+    public string ValueSerialized
+    {
+        get => Value.ToString(CultureInfo.InvariantCulture);
+        set
+        {
+            TryParse(value, out var currencyValue);
+            Value = currencyValue;
+        }
+    }
+
+    [XmlAttribute(AttributeName = "ID")]
     public string Id { get; set; } = null!;
 }

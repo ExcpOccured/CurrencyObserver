@@ -22,8 +22,6 @@ public class CbrClient : ICbrClient
         _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
-
-    // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
     public async Task<CbrCurrencyQuotesResponse?> GetCurrencyQuotesAsync(CancellationToken cancellationToken)
     {
         Debug.Assert(!string.IsNullOrEmpty(_options.Url));
@@ -37,6 +35,8 @@ public class CbrClient : ICbrClient
         }
         catch (HttpRequestException httpRequestException)
         {
+            
+            // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
             _logger.LogError(httpRequestException, httpRequestException.Message);
             return null;
         }
