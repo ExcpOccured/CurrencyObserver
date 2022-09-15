@@ -2,6 +2,7 @@
 
 namespace CurrencyObserver.Controllers;
 
+[ApiController]
 public class CurrencyController : Controller
 {
     

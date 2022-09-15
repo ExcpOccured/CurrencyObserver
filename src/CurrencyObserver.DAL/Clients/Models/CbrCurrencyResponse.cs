@@ -26,11 +26,14 @@ public class CbrCurrencyResponse
         get => Value.ToString(CultureInfo.InvariantCulture);
         set
         {
-            const string russianCultureCode = "Ru-ru";
+            const string commaSeparator = ",";
             
             Debug.Assert(!string.IsNullOrEmpty(value));
             
-            TryParse(value, NumberStyles.Float, new CultureInfo(russianCultureCode), out var currencyValue);
+            TryParse(value, NumberStyles.Currency, new NumberFormatInfo
+            {
+                CurrencyDecimalSeparator = commaSeparator
+            }, out var currencyValue);
             Value = currencyValue;
         }
     }
