@@ -2,15 +2,15 @@
 
 namespace CurrencyObserver.DAL.Clients.Models;
 
-[XmlRoot(ElementName="ValCurs")]
+[XmlRoot(ElementName = "ValCurs")]
 public class CbrCurrencyQuotesResponse
 {
-    [XmlElement(ElementName="Valute")]
+    [XmlElement(ElementName = "Valute")] 
     public List<CbrCurrencyResponse> Currencies { get; set; } = null!;
 
-    [XmlAttribute(AttributeName="Date")]
+    [XmlAttribute(AttributeName = "Date")] 
     public string Date { get; set; } = null!;
 
-    [XmlAttribute(AttributeName="name")]
+    [XmlAttribute(AttributeName = "name")] 
     public string Name { get; set; } = null!;
 }

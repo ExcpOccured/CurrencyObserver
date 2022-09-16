@@ -8,6 +8,21 @@ namespace CurrencyObserver.DAL.Clients.Models;
 [XmlRoot(ElementName = "Valute")]
 public class CbrCurrencyResponse
 {
+    private static readonly NumberFormatInfo ValueDoubleFormat;
+
+    static CbrCurrencyResponse()
+    {
+        const string commaSeparator = ",";
+
+        ValueDoubleFormat = new NumberFormatInfo
+        {
+            CurrencyDecimalSeparator = commaSeparator
+        };
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     [XmlElement(ElementName = "NumCode")] 
     public string NumCode { get; set; } = null!;
 
@@ -26,14 +41,9 @@ public class CbrCurrencyResponse
         get => Value.ToString(CultureInfo.InvariantCulture);
         set
         {
-            const string commaSeparator = ",";
-            
             Debug.Assert(!string.IsNullOrEmpty(value));
             
-            TryParse(value, NumberStyles.Currency, new NumberFormatInfo
-            {
-                CurrencyDecimalSeparator = commaSeparator
-            }, out var currencyValue);
+            TryParse(value, NumberStyles.Currency, ValueDoubleFormat, out var currencyValue);
             Value = currencyValue;
         }
     }

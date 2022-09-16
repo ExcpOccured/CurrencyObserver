@@ -1,6 +1,8 @@
 ﻿namespace CurrencyObserver.Models;
 
-public record Currency
-{
-    public long Id { get; init; }
-}
+public record Currency(
+    long Id, 
+    CurrencyCode CurrencyCode,
+    double Value,
+    string Name,
+    DateTime UpdateAt);

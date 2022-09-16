@@ -1,4 +1,6 @@
 ﻿using CurrencyObserver.DAL.Extensions;
+using CurrencyObserver.Mapping;
+using MediatR;
 
 namespace CurrencyObserver;
 
@@ -16,6 +18,8 @@ public class Startup
         services.AddMvc();
         services.AddRouting();
         services.AddLogging();
+        services.AddSingleton<IMapper, Mapper>();
+        services.AddMediatR(typeof(Startup));
         
         services.AddInternalDataAccessLayer(Configuration);
     }
