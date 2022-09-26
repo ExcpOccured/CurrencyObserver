@@ -1,6 +1,6 @@
-﻿using CurrencyObserver.DAL.Clients.Models;
+﻿using CurrencyObserver.Common.Clients.Models;
 
-namespace CurrencyObserver.DAL.Clients;
+namespace CurrencyObserver.Common.Clients;
 
 public interface ICbrClient
 {

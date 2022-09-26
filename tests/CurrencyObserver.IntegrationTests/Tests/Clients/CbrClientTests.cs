@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using CurrencyObserver.DAL.Clients;
+using CurrencyObserver.Common.Clients;
 using Xunit;
 using Xunit.Abstractions;
 

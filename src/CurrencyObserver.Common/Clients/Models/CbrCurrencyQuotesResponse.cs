@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CurrencyObserver.DAL.Clients.Models;
+namespace CurrencyObserver.Common.Clients.Models;
 
 [XmlRoot(ElementName = "ValCurs")]
 public class CbrCurrencyQuotesResponse

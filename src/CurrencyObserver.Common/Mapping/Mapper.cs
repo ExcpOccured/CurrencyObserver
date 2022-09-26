@@ -1,9 +1,9 @@
-﻿using CurrencyObserver.DAL.Clients.Models;
-using CurrencyObserver.Extensions;
-using CurrencyObserver.Hardcode;
-using CurrencyObserver.Models;
+﻿using CurrencyObserver.Common.Clients.Models;
+using CurrencyObserver.Common.Extensions;
+using CurrencyObserver.Common.Hardcode;
+using CurrencyObserver.Common.Models;
 
-namespace CurrencyObserver.Mapping;
+namespace CurrencyObserver.Common.Mapping;
 
 public class Mapper : IMapper
 {
@@ -12,7 +12,6 @@ public class Mapper : IMapper
         CbrCurrencyResponse currencyFromCbrApi)
     {
         var currencyCode = CurrencyCode.Undefined;
-
         if (WellKnownCurrencyCodes.CbrCharCodeToCurrencyCodeMap
             .TryGetValue(currencyFromCbrApi.CharCode, out var typedCurrencyCode))
         {
@@ -20,7 +19,6 @@ public class Mapper : IMapper
         }
 
         var date = DateTime.UtcNow;
-
         if (DateTime.TryParse(dateFromCbrApi, out var parsedDate))
         {
             date = parsedDate;

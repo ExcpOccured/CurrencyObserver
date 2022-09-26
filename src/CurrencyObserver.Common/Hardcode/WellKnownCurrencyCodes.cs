@@ -1,6 +1,6 @@
-﻿using CurrencyObserver.Models;
+﻿using CurrencyObserver.Common.Models;
 
-namespace CurrencyObserver.Hardcode;
+namespace CurrencyObserver.Common.Hardcode;
 
 // TODO: Move this to Redis
 public static class WellKnownCurrencyCodes

@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{30FF3C17
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyObserver.IntegrationTests", "tests\CurrencyObserver.IntegrationTests\CurrencyObserver.IntegrationTests.csproj", "{B3B8475F-AEEE-4068-8369-F9CA31437A44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyObserver.Common", "src\CurrencyObserver.Common\CurrencyObserver.Common.csproj", "{EE34A418-D337-45DE-A44B-7EF66924B7C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +36,15 @@ Global
 		{B3B8475F-AEEE-4068-8369-F9CA31437A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3B8475F-AEEE-4068-8369-F9CA31437A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3B8475F-AEEE-4068-8369-F9CA31437A44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE34A418-D337-45DE-A44B-7EF66924B7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE34A418-D337-45DE-A44B-7EF66924B7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE34A418-D337-45DE-A44B-7EF66924B7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE34A418-D337-45DE-A44B-7EF66924B7C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D57F3183-5963-4A3E-A959-82674897C41B} = {E01363AF-F381-469D-9BAE-6C42D05AC731}
 		{BE9A778C-397D-479D-B344-FED23D0FAC39} = {E01363AF-F381-469D-9BAE-6C42D05AC731}
 		{B3B8475F-AEEE-4068-8369-F9CA31437A44} = {30FF3C17-ADAF-40AE-811D-9F439379A749}
+		{EE34A418-D337-45DE-A44B-7EF66924B7C8} = {E01363AF-F381-469D-9BAE-6C42D05AC731}
 	EndGlobalSection
 EndGlobal

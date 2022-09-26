@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Xml.Serialization;
 using static System.Double;
 
-namespace CurrencyObserver.DAL.Clients.Models;
+namespace CurrencyObserver.Common.Clients.Models;
 
 [XmlRoot(ElementName = "Valute")]
 public class CbrCurrencyResponse

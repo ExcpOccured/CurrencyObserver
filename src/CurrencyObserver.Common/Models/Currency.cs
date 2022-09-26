@@ -1,4 +1,4 @@
-﻿namespace CurrencyObserver.Models;
+﻿namespace CurrencyObserver.Common.Models;
 
 public record Currency(
     long Id, 

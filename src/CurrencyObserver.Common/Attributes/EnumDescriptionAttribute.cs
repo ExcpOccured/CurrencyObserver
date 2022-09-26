@@ -1,4 +1,4 @@
-﻿namespace CurrencyObserver.Attributes;
+﻿namespace CurrencyObserver.Common.Attributes;
 
 [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field)]
 public class EnumDescriptionAttribute : Attribute

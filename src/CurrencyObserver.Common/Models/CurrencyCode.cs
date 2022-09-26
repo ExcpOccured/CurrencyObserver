@@ -1,6 +1,6 @@
-﻿using CurrencyObserver.Attributes;
+﻿using CurrencyObserver.Common.Attributes;
 
-namespace CurrencyObserver.Models;
+namespace CurrencyObserver.Common.Models;
 
 /// <summary>
 /// The currency code that meets the <see cref="CbrCurrencyResponse.CharCode"/>>

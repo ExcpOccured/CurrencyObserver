@@ -1,4 +1,4 @@
-﻿namespace CurrencyObserver.Extensions;
+﻿namespace CurrencyObserver.Common.Extensions;
 
 public static class EnumerableExtensions
 {

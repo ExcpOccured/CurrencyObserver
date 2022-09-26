@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Xml.Serialization;
-using CurrencyObserver.DAL.Clients.Models;
+using CurrencyObserver.Common.Clients;
+using CurrencyObserver.Common.Clients.Models;
 using CurrencyObserver.DAL.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

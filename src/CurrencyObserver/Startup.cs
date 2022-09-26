@@ -1,5 +1,6 @@
-﻿using CurrencyObserver.DAL.Extensions;
-using CurrencyObserver.Mapping;
+﻿using CurrencyObserver.Common.Mapping;
+using CurrencyObserver.DAL;
+using CurrencyObserver.DAL.Extensions;
 using MediatR;
 
 namespace CurrencyObserver;
