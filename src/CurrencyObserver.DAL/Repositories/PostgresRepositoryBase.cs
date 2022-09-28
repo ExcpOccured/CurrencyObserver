@@ -25,7 +25,12 @@ public abstract class PostgresRepositoryBase
         var timeoutCts = new CancellationTokenSource(_options.Timeout);
         return CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
     }
-    
+
+    protected Task<NpgsqlTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
+    {
+        return BeginTransactionInternalAsync(cancellationToken);
+    }
+
     protected string GetQueryName([CallerMemberName] string? caller = null)
     {
         return $"{GetType().Name}.{caller}";
@@ -33,8 +38,6 @@ public abstract class PostgresRepositoryBase
 
     private async Task<NpgsqlConnection> OpenConnectionInternalAsync(CancellationToken cancellationToken)
     {
-        using var cts = CreateCancellationTokenSource(cancellationToken);
-
         NpgsqlConnection? connection = null;
         try
         {
@@ -45,6 +48,21 @@ public abstract class PostgresRepositoryBase
         catch (Exception)
         {
             connection?.Dispose();
+            throw;
+        }
+    }
+
+    private async Task<NpgsqlTransaction> BeginTransactionInternalAsync(CancellationToken cancellationToken)
+    {
+        var connection = await OpenConnectionInternalAsync(cancellationToken);
+        try
+        {
+            var transaction = await connection.BeginTransactionAsync(cancellationToken);
+            return transaction;
+        }
+        catch (Exception)
+        {
+            connection.Dispose();
             throw;
         }
     }

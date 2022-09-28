@@ -4,5 +4,7 @@ namespace CurrencyObserver.DAL.Repositories;
 
 public interface ICurrencyRepository
 {
-   Task<List<Currency>> GetAllAsync (CancellationToken cancellationToken);
+   Task<List<Currency>> GetLstAsync (CancellationToken cancellationToken);
+
+   Task UpsertLstAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
 }

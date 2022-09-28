@@ -1,4 +1,5 @@
 ﻿using CurrencyObserver.Common.Clients.Models;
+using CurrencyObserver.Common.Exceptions;
 using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Hardcode;
 using CurrencyObserver.Common.Models;
@@ -24,8 +25,13 @@ public class Mapper : IMapper
             date = parsedDate;
         }
 
+        if (!long.TryParse(currencyFromCbrApi.NumCode, out var parsedCurrencyId))
+        {
+            throw new FailedToParseNumCodeException(currencyFromCbrApi.NumCode);
+        }
+
         return new Currency(
-            long.Parse(currencyFromCbrApi.NumCode),
+            parsedCurrencyId,
             currencyCode,
             currencyFromCbrApi.Value,
             currencyCode.GetDescription(),
