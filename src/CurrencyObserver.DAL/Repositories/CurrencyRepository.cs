@@ -65,21 +65,20 @@ FROM
 -- @Query({GetQueryName()})
 CREATE TEMP TABLE IF NOT EXISTS {TempTable}
 (
-    id BIGING NOT NULL,
-    currency_code INT NOT NULL,
-    value DOUBLE NOT NULL,
-    name VARCHAR(64) NOT NULL,
-    update_at TIMESTAMP NOT NULL
+    id            BIGING       NOT NULL,
+    currency_code INT          NOT NULL,
+    value         DOUBLE       NOT NULL,
+    name          VARCHAR(128) NOT NULL,
+    added_at      TIMESTAMP    NOT NULL
 ) ON COMMIT DROP;
 ";
-
         await createTempTableCommand.ExecuteNonQueryAsync(cancellationToken);
         var currenciesCopyHelper = new PostgreSQLCopyHelper<Currency>(TempTable)
             .MapBigInt("id", currency => currency.Id)
             .MapInteger("currency_code", currency => (int)currency.CurrencyCode)
             .MapDouble("value", currency => currency.Value)
             .MapVarchar("name", currency => currency.Name)
-            .MapTimeStamp("updated_at", currency => currency.UpdateAt);
+            .MapTimeStamp("added_at", currency => currency.AddedAt);
 
         await currenciesCopyHelper.SaveAllAsync(transaction.Connection, currencies, cancellationToken);
     }
@@ -91,26 +90,23 @@ CREATE TEMP TABLE IF NOT EXISTS {TempTable}
         await using var mergeCurrenciesCommand = transaction.Connection!.CreateCommand();
         mergeCurrenciesCommand.CommandText = $@"
 -- @Query({GetQueryName()})
-INSERT INTO currency_observer.currency (
-   id,
-   currency_code,
-   value,
-   name,
-   updated_at
-)
-SELECT 
-   id,
-   currency_code,
-   value,
-   name,
-   updated_at
+INSERT INTO currency_observer.currency (id,
+                                        currency_code,
+                                        value,
+                                        name,
+                                        added_at)
+SELECT id,
+       currency_code,
+       value,
+       name,
+       added_at
 FROM {TempTable}
-ON CONFLICT (id, updated_at)
-DO UPDATE
-   SET currency_code = exluce.currency_code,
-       value = exclude.value,
-       name = exclude.name,
-       updated_at = exlude.updated_at;
+ON CONFLICT (id, added_at)
+    DO UPDATE
+    SET currency_code = exluce.currency_code,
+        value         = exclude.value,
+        name          = exclude.name,
+        updated_at    = exlude.added_at;
 ";
 
         await mergeCurrenciesCommand.ExecuteNonQueryAsync(cancellationToken);
@@ -131,6 +127,6 @@ DO UPDATE
     currency_code,
     value,
     name,
-    updated_at
+    added_at
 ";
 }

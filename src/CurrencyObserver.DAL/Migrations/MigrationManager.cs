@@ -11,7 +11,7 @@ public class MigrationManager : IMigrationManager
         DatabaseOptions dbOptions,
         ILogger logger)
     {
-        const string sqlFilesPath = "Database.Migrations.Sql.";
+        const string sqlFilesPath = "Migrations.Sql.";
 
         var assembly = Assembly.GetExecutingAssembly();
 
@@ -20,6 +20,7 @@ public class MigrationManager : IMigrationManager
             sqlFilesPath);
 
         using var dbConnection = new NpgsqlConnection(dbOptions.ConnectionString);
+        dbConnection.Open();
 
         foreach (var sqlFile in assemblySqlFiles)
         {
@@ -52,6 +53,5 @@ public class MigrationManager : IMigrationManager
         sqlFilesAssembly
             .GetManifestResourceNames()
             .Where(str => str.StartsWith($"{sqlFilesAssembly.GetName().Name}.{sqlFilesPath}"))
-            .OrderBy(str => str)
-            .ToList();
+            .OrderBy(str => str);
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using CurrencyObserver.Common.Clients;
+using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Mapping;
 using CurrencyObserver.Common.Models;
 using CurrencyObserver.Queries;
@@ -38,7 +39,8 @@ public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFiltrati
         return currenciesFromCbrApi
             .Currencies
             .Select(currencyFromCbrApi => _mapper.Map(cbrCurrenciesDate, currencyFromCbrApi))
-            .Where(query.FiltrationPredicate)
+            .WhereIf(query.Predicate)
+            .OrderBy(currency => currency.Id)
             .ToImmutableList();
     }
 }

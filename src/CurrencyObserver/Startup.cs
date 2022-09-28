@@ -20,6 +20,7 @@ public class Startup
         services.AddLogging();
         services.AddSingleton<IMapper, Mapper>();
         services.AddMediatR(typeof(Startup));
+        services.AddSwaggerGen();
         
         services.AddInternalDataAccessLayer(Configuration);
     }
@@ -28,6 +29,8 @@ public class Startup
         IApplicationBuilder app)
     {
         app.UseRouting();
+        app.UseSwagger();
+        app.UseSwaggerUI();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }
