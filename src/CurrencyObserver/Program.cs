@@ -1,3 +1,5 @@
+using CurrencyObserver.Extensions;
+
 namespace CurrencyObserver;
 
 public static class Program
@@ -5,7 +7,10 @@ public static class Program
     private const string SettingsFile = "appsettings.json";
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
+        CreateHostBuilder(args)
+            .Build()
+            .MigrateDatabase(args)
+            .Run();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args)

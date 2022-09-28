@@ -22,4 +22,10 @@
       <ProjectReference Include="..\CurrencyObserver.Common\CurrencyObserver.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="..\..\sql\001_createTables.sql">
+        <Link>Migrations\Sql\001_createTables.sql</Link>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

@@ -18,6 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyObserver.Integratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyObserver.Common", "src\CurrencyObserver.Common\CurrencyObserver.Common.csproj", "{EE34A418-D337-45DE-A44B-7EF66924B7C8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{5F03B047-E2E8-423B-80AB-D184EF03FC07}"
+	ProjectSection(SolutionItems) = preProject
+		sql\001_createTables.sql = sql\001_createTables.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -2,7 +2,7 @@
 
 namespace CurrencyObserver.Common.Hardcode;
 
-// TODO: Move this to Redis
+// TODO: Move this to the Redis
 public static class WellKnownCurrencyCodes
 {
     public static readonly Dictionary<string, CurrencyCode> CbrCharCodeToCurrencyCodeMap;

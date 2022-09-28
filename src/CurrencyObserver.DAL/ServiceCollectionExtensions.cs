@@ -1,5 +1,6 @@
 ﻿using CurrencyObserver.Common.Clients;
 using CurrencyObserver.DAL.Clients;
+using CurrencyObserver.DAL.Migrations;
 using CurrencyObserver.DAL.Options;
 using CurrencyObserver.DAL.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient();
         services.AddSingleton<ICbrClient, CbrClient>();
 
+        services.AddSingleton<IMigrationManager, MigrationManager>();
         services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
     }
 }
