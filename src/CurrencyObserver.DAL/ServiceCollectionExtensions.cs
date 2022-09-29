@@ -10,12 +10,13 @@ namespace CurrencyObserver.DAL;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddInternalDataAccessLayer(
+    public static void AddDatabase(
         this IServiceCollection services, 
         IConfiguration configuration)
     {
         services.Configure<CbrClientOptions>(configuration.GetSection(CbrClientOptions.Section));
-        services.Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.Section));
+        services.Configure<PgOptions>(configuration.GetSection(PgOptions.Section));
+        services.Configure<RedisOptions>(configuration.GetSection(RedisOptions.Section));
         
         services.AddHttpClient();
         services.AddSingleton<ICbrClient, CbrClient>();

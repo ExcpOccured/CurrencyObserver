@@ -6,6 +6,6 @@ namespace CurrencyObserver.DAL.Migrations;
 public interface IMigrationManager
 {
     void ApplyMigrations(
-        DatabaseOptions dbOptions,
+        PgOptions dbOptions,
         ILogger logger);
 }

@@ -7,10 +7,10 @@ namespace CurrencyObserver.DAL.Repositories;
 
 public abstract class PostgresRepositoryBase
 {
-    private readonly DatabaseOptions _options;
+    private readonly PgOptions _options;
 
     protected PostgresRepositoryBase(
-        IOptions<DatabaseOptions> options)
+        IOptions<PgOptions> options)
     {
         _options = options.Value;
     }

@@ -11,7 +11,7 @@ public static class HostExtensions
         using var scope = host.Services.CreateScope();
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<MigrationManager>>();
-        var dbOptions = scope.ServiceProvider.GetRequiredService<IOptions<DatabaseOptions>>();
+        var dbOptions = scope.ServiceProvider.GetRequiredService<IOptions<PgOptions>>();
         var migrationManager = scope.ServiceProvider.GetRequiredService<IMigrationManager>();
 
         try

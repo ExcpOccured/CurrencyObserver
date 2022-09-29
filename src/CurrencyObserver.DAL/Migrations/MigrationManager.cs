@@ -8,7 +8,7 @@ namespace CurrencyObserver.DAL.Migrations;
 public class MigrationManager : IMigrationManager
 {
     public void ApplyMigrations(
-        DatabaseOptions dbOptions,
+        PgOptions dbOptions,
         ILogger logger)
     {
         const string sqlFilesPath = "Migrations.Sql.";

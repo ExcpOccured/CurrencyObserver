@@ -11,7 +11,7 @@ namespace CurrencyObserver.DAL.Repositories;
 
 public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
 {
-    public CurrencyRepository(IOptions<DatabaseOptions> options) : base(options) { }
+    public CurrencyRepository(IOptions<PgOptions> options) : base(options) { }
 
     private const string TempTable = "temp_currency";
 

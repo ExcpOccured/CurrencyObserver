@@ -22,7 +22,7 @@ public class Startup
         services.AddMediatR(typeof(Startup));
         services.AddSwaggerGen();
         
-        services.AddInternalDataAccessLayer(Configuration);
+        services.AddDatabase(Configuration);
     }
 
     public void Configure(
