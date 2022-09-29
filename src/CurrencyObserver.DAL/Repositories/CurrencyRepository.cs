@@ -15,21 +15,35 @@ public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
 
     private const string TempTable = "temp_currency";
 
-    public async Task<List<Currency>> GetLstAsync(CancellationToken cancellationToken)
+    public async Task<List<Currency>> GetLstAsync(
+        DateTime? toDate,
+        CancellationToken cancellationToken)
     {
         using var cts = CreateCancellationTokenSource(cancellationToken);
+
+        var whereStatement = string.Empty;
+        if (toDate is not null)
+        {
+            whereStatement = "WHERE added_at = @added_at";
+        }
 
         var query = $@"
 -- @Query({GetQueryName()})
 SELECT
    {SelectFieldsLst}
 FROM
-    currency_observer.currency;";
+    currency_observer.currency
+{whereStatement};";
 
         await using var connection = await OpenConnectionAsync(cts.Token);
         await using var command = connection.CreateCommand();
 
         command.CommandText = query;
+
+        if (!string.IsNullOrEmpty(whereStatement))
+        {
+            command.Parameters.AddWithValue("@added_at", toDate!);
+        }
 
         await using var reader = await command.ExecuteReaderAsync(cts.Token);
 
@@ -65,11 +79,11 @@ FROM
 -- @Query({GetQueryName()})
 CREATE TEMP TABLE IF NOT EXISTS {TempTable}
 (
-    id            BIGING       NOT NULL,
-    currency_code INT          NOT NULL,
-    value         DOUBLE       NOT NULL,
-    name          VARCHAR(128) NOT NULL,
-    added_at      TIMESTAMP    NOT NULL
+    id            BIGINT                NOT NULL,
+    currency_code INT                   NOT NULL,
+    value         DOUBLE PRECISION      NOT NULL,
+    name          VARCHAR(128)          NOT NULL,
+    added_at      TIMESTAMP             NOT NULL
 ) ON COMMIT DROP;
 ";
         await createTempTableCommand.ExecuteNonQueryAsync(cancellationToken);
@@ -103,10 +117,10 @@ SELECT id,
 FROM {TempTable}
 ON CONFLICT (id, added_at)
     DO UPDATE
-    SET currency_code = exluce.currency_code,
-        value         = exclude.value,
-        name          = exclude.name,
-        updated_at    = exlude.added_at;
+    SET currency_code = excluded.currency_code,
+        value         = excluded.value,
+        name          = excluded.name,
+        added_at    = excluded.added_at;
 ";
 
         await mergeCurrenciesCommand.ExecuteNonQueryAsync(cancellationToken);

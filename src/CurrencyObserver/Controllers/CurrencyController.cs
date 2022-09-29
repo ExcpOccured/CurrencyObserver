@@ -1,4 +1,5 @@
-﻿using CurrencyObserver.Common.Models;
+﻿using CurrencyObserver.Common.Extensions;
+using CurrencyObserver.Common.Models;
 using CurrencyObserver.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,26 @@ public class CurrencyController : Controller
     public async Task<ActionResult<List<Currency>>> GetByDate(
         [FromQuery] DateTime date)
     {
-        var currencies = await _mediator.Send(new CurrenciesFiltrationQuery
+        var currenciesFromDb = await _mediator.Send(new GetCurrenciesByDateQuery()
+        {
+            ToDate = date
+        });
+
+        if (!currenciesFromDb.IsEmpty())
+        {
+            return Ok(currenciesFromDb);
+        }
+
+        var currenciesFromCbrApi = await _mediator.Send(new CurrenciesFiltrationQuery
         {
             Predicate = currency => DateTime.Equals(currency.AddedAt, date)
         });
 
-        return Ok(currencies);
+        await _mediator.Send(new UpsertCurrenciesQuery()
+        {
+            Currencies = currenciesFromCbrApi
+        });
+
+        return Ok(currenciesFromCbrApi);
     }
 }
