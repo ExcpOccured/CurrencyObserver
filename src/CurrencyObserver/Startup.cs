@@ -1,5 +1,5 @@
-﻿using CurrencyObserver.Common.Mapping;
-using CurrencyObserver.Common.Utils;
+﻿using CurrencyObserver.Common;
+using CurrencyObserver.Common.Mapping;
 using CurrencyObserver.DAL;
 using MediatR;
 
@@ -23,8 +23,8 @@ public class Startup
         services.AddMediatR(typeof(Startup));
         services.AddSwaggerGen();
 
-        services.AddSingleton<AsyncReadWriteLocker>();
-        services.AddDatabase(Configuration);
+        services.AddCommon();
+        services.AddDatabases(Configuration);
     }
 
     public void Configure(

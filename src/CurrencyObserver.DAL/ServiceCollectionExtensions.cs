@@ -6,13 +6,12 @@ using CurrencyObserver.DAL.Providers;
 using CurrencyObserver.DAL.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
 
 namespace CurrencyObserver.DAL;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddDatabase(
+    public static void AddDatabases(
         this IServiceCollection services, 
         IConfiguration configuration)
     {
@@ -30,6 +29,7 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<IMigrationManager, MigrationManager>();
         services.AddSingleton<IPgSqlMigrator, PgSqlMigrator>();
+        services.AddSingleton<IRedisMigrator, RedisMigrator>();
         
         services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
     }

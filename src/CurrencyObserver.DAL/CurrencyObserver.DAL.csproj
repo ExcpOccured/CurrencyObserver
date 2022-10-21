@@ -28,4 +28,10 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="..\..\redis-queries\001_createDataTypesQuery.txt">
+        <Link>Migrations\Redis\001_createDataTypesQuery.txt</Link>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

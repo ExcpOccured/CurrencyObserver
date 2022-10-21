@@ -5,4 +5,6 @@ namespace CurrencyObserver.DAL.Providers;
 public interface IRedisConnectionProvider
 {
     Task<ConnectionMultiplexer> OpenConnectionAsync(CancellationToken cancellationToken);
+
+    ConnectionMultiplexer OpenConnection();
 }

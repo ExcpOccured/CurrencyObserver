@@ -27,6 +27,51 @@ public class RedisConnectionProvider : IRedisConnectionProvider
         return OpenConnectionInternalAsync(cancellationToken);
     }
 
+    public ConnectionMultiplexer OpenConnection()
+    {
+        return OpenConnectionInternal();
+    }
+
+    private ConnectionMultiplexer OpenConnectionInternal()
+    {
+        using var _ = _locker.ReadLock();
+        {
+            if (_raisedException is not null)
+            {
+                throw _raisedException;
+            }
+
+            if (_multiplexer is not null)
+            {
+                return _multiplexer;
+            }
+        }
+
+        ConnectionMultiplexer? multiplexer = null;
+        try
+        {
+            multiplexer = ConnectionMultiplexer.Connect(_options.ConnectionString);
+
+            using var __ = _locker.WriteLock();
+            {
+                _multiplexer = multiplexer;
+            }
+
+            return multiplexer;
+        }
+        catch (Exception exception)
+        {
+            multiplexer?.Dispose();
+
+            using var __ = _locker.WriteLock();
+            {
+                _raisedException = exception;
+            }
+
+            throw;
+        }
+    }
+
     private Task<ConnectionMultiplexer> OpenConnectionInternalAsync(CancellationToken cancellationToken)
     {
         using var _ = _locker.ReadLock();
