@@ -1,4 +1,4 @@
-﻿using CurrencyObserver.DAL.Options;
+﻿using CurrencyObserver.DAL.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace CurrencyObserver.DAL.Migrations;
@@ -6,6 +6,6 @@ namespace CurrencyObserver.DAL.Migrations;
 public interface IMigrationManager
 {
     void ApplyMigrations(
-        PgOptions dbOptions,
+        IConnectionProvider connectionProvider,
         ILogger logger);
 }

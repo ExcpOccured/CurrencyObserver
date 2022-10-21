@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
-using CurrencyObserver.DAL.Options;
+using CurrencyObserver.DAL.Providers;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 
 namespace CurrencyObserver.DAL.Migrations;
 
 public class MigrationManager : IMigrationManager
 {
     public void ApplyMigrations(
-        PgOptions dbOptions,
+        IConnectionProvider connectionProvider,
         ILogger logger)
     {
         const string sqlFilesPath = "Migrations.Sql.";
@@ -19,8 +18,7 @@ public class MigrationManager : IMigrationManager
             assembly,
             sqlFilesPath);
 
-        using var dbConnection = new NpgsqlConnection(dbOptions.ConnectionString);
-        dbConnection.Open();
+        using var dbConnection = connectionProvider.OpenConnection();
 
         foreach (var sqlFile in assemblySqlFiles)
         {

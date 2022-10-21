@@ -1,6 +1,5 @@
 ﻿using CurrencyObserver.DAL.Migrations;
-using CurrencyObserver.DAL.Options;
-using Microsoft.Extensions.Options;
+using CurrencyObserver.DAL.Providers;
 
 namespace CurrencyObserver.Extensions;
 
@@ -11,12 +10,12 @@ public static class HostExtensions
         using var scope = host.Services.CreateScope();
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<MigrationManager>>();
-        var dbOptions = scope.ServiceProvider.GetRequiredService<IOptions<PgOptions>>();
         var migrationManager = scope.ServiceProvider.GetRequiredService<IMigrationManager>();
+        var connectionProvider = scope.ServiceProvider.GetRequiredService<IConnectionProvider>();
 
         try
         {
-            migrationManager.ApplyMigrations(dbOptions.Value, logger);
+            migrationManager.ApplyMigrations(connectionProvider, logger);
         }
         catch (Exception exception)
         {

@@ -16,6 +16,7 @@ public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
     private const string TempTable = "temp_currency";
 
     public async Task<List<Currency>> GetLstAsync(
+        NpgsqlTransaction transaction,
         DateTime? toDate,
         CancellationToken cancellationToken)
     {
@@ -35,8 +36,7 @@ FROM
     currency_observer.currency
 {whereStatement};";
 
-        await using var connection = await OpenConnectionAsync(cts.Token);
-        await using var command = connection.CreateCommand();
+        await using var command = transaction.Connection!.CreateCommand();
 
         command.CommandText = query;
 
@@ -57,16 +57,15 @@ FROM
         return currencies;
     }
 
-    public async Task UpsertLstAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
+    public async Task UpsertLstAsync(
+        NpgsqlTransaction transaction,
+        IEnumerable<Currency> currencies,
+        CancellationToken cancellationToken)
     {
         using var cts = CreateCancellationTokenSource(cancellationToken);
 
-        await using var transaction = await BeginTransactionAsync(cts.Token);
-
         await CopyCurrenciesToTempTableAsync(transaction, currencies, cts.Token);
         await MergeCurrenciesFromTempTableAsync(transaction, cts.Token);
-
-        await transaction.CommitAsync(cts.Token);
     }
 
     private async Task CopyCurrenciesToTempTableAsync(
@@ -102,6 +101,7 @@ CREATE TEMP TABLE IF NOT EXISTS {TempTable}
         CancellationToken cancellationToken)
     {
         await using var mergeCurrenciesCommand = transaction.Connection!.CreateCommand();
+        
         mergeCurrenciesCommand.CommandText = $@"
 -- @Query({GetQueryName()})
 INSERT INTO currency_observer.currency (id,
@@ -120,7 +120,7 @@ ON CONFLICT (id, added_at)
     SET currency_code = excluded.currency_code,
         value         = excluded.value,
         name          = excluded.name,
-        added_at    = excluded.added_at;
+        added_at      = excluded.added_at;
 ";
 
         await mergeCurrenciesCommand.ExecuteNonQueryAsync(cancellationToken);

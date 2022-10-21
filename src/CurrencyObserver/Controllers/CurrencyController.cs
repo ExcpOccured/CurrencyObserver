@@ -20,7 +20,7 @@ public class CurrencyController : Controller
     public async Task<ActionResult<List<Currency>>> GetByDate(
         [FromQuery] DateTime date)
     {
-        var currenciesFromDb = await _mediator.Send(new GetCurrenciesByDateQuery()
+        var currenciesFromDb = await _mediator.Send(new GetCurrenciesByDateQuery
         {
             ToDate = date
         });
@@ -35,7 +35,7 @@ public class CurrencyController : Controller
             Predicate = currency => DateTime.Equals(currency.AddedAt, date)
         });
 
-        await _mediator.Send(new UpsertCurrenciesQuery()
+        await _mediator.Send(new UpsertCurrenciesQuery
         {
             Currencies = currenciesFromCbrApi
         });
