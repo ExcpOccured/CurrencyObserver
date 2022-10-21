@@ -1,4 +1,5 @@
 ﻿using CurrencyObserver.Common.Mapping;
+using CurrencyObserver.Common.Utils;
 using CurrencyObserver.DAL;
 using MediatR;
 
@@ -21,7 +22,8 @@ public class Startup
         services.AddSingleton<IMapper, Mapper>();
         services.AddMediatR(typeof(Startup));
         services.AddSwaggerGen();
-        
+
+        services.AddSingleton<AsyncReadWriteLocker>();
         services.AddDatabase(Configuration);
     }
 

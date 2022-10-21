@@ -1,11 +1,10 @@
-﻿using CurrencyObserver.DAL.Providers;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace CurrencyObserver.DAL.Migrations;
 
 public interface IMigrationManager
 {
     void ApplyMigrations(
-        IPgSqlConnectionProvider pgSqlConnectionProvider,
+        IServiceProvider services,
         ILogger logger);
 }

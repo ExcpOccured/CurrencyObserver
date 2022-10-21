@@ -9,7 +9,7 @@ public static class Program
     {
         CreateHostBuilder(args)
             .Build()
-            .MigrateDatabase(args)
+            .MigrateDatabases(args)
             .Run();
     }
 

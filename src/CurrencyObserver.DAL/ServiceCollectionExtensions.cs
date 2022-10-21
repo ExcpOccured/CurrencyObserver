@@ -25,8 +25,12 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IPgSqlConnectionProvider, PgSqlConnectionProvider>();
         services.AddSingleton<IPgSqlTransactionProvider, PgSqlTransactionProvider>();
+
+        services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>();
         
         services.AddSingleton<IMigrationManager, MigrationManager>();
+        services.AddSingleton<IPgSqlMigrator, PgSqlMigrator>();
+        
         services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
     }
 }

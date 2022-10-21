@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using CurrencyObserver.DAL.Providers;
+﻿using CurrencyObserver.DAL.Providers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CurrencyObserver.DAL.Migrations;
@@ -7,49 +7,18 @@ namespace CurrencyObserver.DAL.Migrations;
 public class MigrationManager : IMigrationManager
 {
     public void ApplyMigrations(
-        IPgSqlConnectionProvider pgSqlConnectionProvider,
+        IServiceProvider services,
         ILogger logger)
     {
-        const string sqlFilesPath = "Migrations.Sql.";
+        var pgSqlMigrator = services.GetRequiredService<IPgSqlMigrator>();
+        var pgSqlConnectionProvider = services.GetRequiredService<IPgSqlConnectionProvider>();
+        
+        logger.LogInformation("Start PostgreSQL migrations");
 
-        var assembly = Assembly.GetExecutingAssembly();
-
-        var assemblySqlFiles = GetExecutableSqlFiles(
-            assembly,
-            sqlFilesPath);
-
-        using var dbConnection = pgSqlConnectionProvider.OpenConnection();
-
-        foreach (var sqlFile in assemblySqlFiles)
-        {
-            var sqlContent = ReadEmbeddedResource(assembly, sqlFile);
-
-            using var sqlCommand = dbConnection.CreateCommand();
-            sqlCommand.CommandText = sqlContent;
-            sqlCommand.ExecuteNonQuery();
-        }
+        pgSqlMigrator.ApplyMigrations(pgSqlConnectionProvider, logger);
+        
+        logger.LogInformation("PostgreSQL migrations applied");
+        
+        
     }
-
-    private static string ReadEmbeddedResource(
-        Assembly assembly,
-        string resource)
-    {
-        using var stream = assembly.GetManifestResourceStream(resource);
-
-        if (stream is null)
-        {
-            throw new InvalidOperationException($"Resource {resource} not found");
-        }
-
-        using var reader = new StreamReader(stream);
-        return reader.ReadToEnd();
-    }
-
-    private static IEnumerable<string> GetExecutableSqlFiles(
-        Assembly sqlFilesAssembly,
-        string? sqlFilesPath) =>
-        sqlFilesAssembly
-            .GetManifestResourceNames()
-            .Where(str => str.StartsWith($"{sqlFilesAssembly.GetName().Name}.{sqlFilesPath}"))
-            .OrderBy(str => str);
 }
