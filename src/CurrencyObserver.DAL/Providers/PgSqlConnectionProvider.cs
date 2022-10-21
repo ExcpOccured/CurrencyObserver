@@ -4,11 +4,11 @@ using Npgsql;
 
 namespace CurrencyObserver.DAL.Providers;
 
-public class ConnectionProvider : IConnectionProvider
+public class PgSqlConnectionProvider : IPgSqlConnectionProvider
 {
     private readonly PgOptions _options;
 
-    public ConnectionProvider(IOptions<PgOptions> options)
+    public PgSqlConnectionProvider(IOptions<PgOptions> options)
     {
         _options = options.Value;
     }

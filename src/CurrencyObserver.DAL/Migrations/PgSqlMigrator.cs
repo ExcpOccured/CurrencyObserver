@@ -3,9 +3,12 @@ using Microsoft.Extensions.Logging;
 
 namespace CurrencyObserver.DAL.Migrations;
 
-public interface IMigrationManager
+public class PgSqlMigrator : IPgSqlMigrator
 {
-    void ApplyMigrations(
+    public void ApplyMigrations(
         IPgSqlConnectionProvider pgSqlConnectionProvider,
-        ILogger logger);
+        ILogger logger)
+    {
+        throw new NotImplementedException();
+    }
 }

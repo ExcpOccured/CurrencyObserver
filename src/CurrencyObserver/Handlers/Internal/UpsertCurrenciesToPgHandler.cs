@@ -1,6 +1,6 @@
 ﻿using CurrencyObserver.DAL.Providers;
 using CurrencyObserver.DAL.Repositories;
-using CurrencyObserver.Queries;
+using CurrencyObserver.Queries.Internal;
 using JetBrains.Annotations;
 using MediatR;
 
@@ -11,21 +11,21 @@ public class UpsertCurrenciesToPgHandler : IRequestHandler<UpsertCurrenciesQuery
 {
     private readonly ICurrencyRepository _currencyRepository;
 
-    private readonly ITransactionProvider _transactionProvider;
+    private readonly IPgSqlTransactionProvider _pgSqlTransactionProvider;
 
     public UpsertCurrenciesToPgHandler(
         ICurrencyRepository currencyRepository, 
-        ITransactionProvider transactionProvider)
+        IPgSqlTransactionProvider pgSqlTransactionProvider)
     {
         _currencyRepository = currencyRepository;
-        _transactionProvider = transactionProvider;
+        _pgSqlTransactionProvider = pgSqlTransactionProvider;
     }
 
     public async Task<Unit> Handle(
         UpsertCurrenciesQuery query,
         CancellationToken cancellationToken)
     {
-        await using var transaction = await _transactionProvider.BeginTransactionAsync(cancellationToken);
+        await using var transaction = await _pgSqlTransactionProvider.BeginTransactionAsync(cancellationToken);
         
         await _currencyRepository.UpsertLstAsync(
             transaction,

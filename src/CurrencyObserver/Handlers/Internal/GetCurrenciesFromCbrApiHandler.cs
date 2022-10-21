@@ -3,14 +3,14 @@ using CurrencyObserver.Common.Clients;
 using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Mapping;
 using CurrencyObserver.Common.Models;
-using CurrencyObserver.Queries;
+using CurrencyObserver.Queries.Internal;
 using JetBrains.Annotations;
 using MediatR;
 
 namespace CurrencyObserver.Handlers.Internal;
 
 [UsedImplicitly]
-public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFiltrationQuery, IReadOnlyList<Currency>>
+public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFromCbrApiQuery, IReadOnlyList<Currency>>
 {
     private readonly ICbrClient _cbrClient;
 
@@ -25,7 +25,7 @@ public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFiltrati
     }
 
     public async Task<IReadOnlyList<Currency>> Handle(
-        CurrenciesFiltrationQuery query,
+        CurrenciesFromCbrApiQuery query,
         CancellationToken cancellationToken)
     {
         var currenciesFromCbrApi = await _cbrClient.GetCurrencyQuotesAsync(cancellationToken);

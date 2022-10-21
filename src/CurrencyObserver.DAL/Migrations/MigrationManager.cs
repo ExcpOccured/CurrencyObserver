@@ -7,7 +7,7 @@ namespace CurrencyObserver.DAL.Migrations;
 public class MigrationManager : IMigrationManager
 {
     public void ApplyMigrations(
-        IConnectionProvider connectionProvider,
+        IPgSqlConnectionProvider pgSqlConnectionProvider,
         ILogger logger)
     {
         const string sqlFilesPath = "Migrations.Sql.";
@@ -18,7 +18,7 @@ public class MigrationManager : IMigrationManager
             assembly,
             sqlFilesPath);
 
-        using var dbConnection = connectionProvider.OpenConnection();
+        using var dbConnection = pgSqlConnectionProvider.OpenConnection();
 
         foreach (var sqlFile in assemblySqlFiles)
         {

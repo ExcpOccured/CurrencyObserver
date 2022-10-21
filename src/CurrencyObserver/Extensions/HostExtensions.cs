@@ -11,7 +11,7 @@ public static class HostExtensions
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<MigrationManager>>();
         var migrationManager = scope.ServiceProvider.GetRequiredService<IMigrationManager>();
-        var connectionProvider = scope.ServiceProvider.GetRequiredService<IConnectionProvider>();
+        var connectionProvider = scope.ServiceProvider.GetRequiredService<IPgSqlConnectionProvider>();
 
         try
         {

@@ -1,9 +1,5 @@
-﻿using CurrencyObserver.Common.Models;
-using MediatR;
+﻿using CurrencyObserver.Queries.Internal;
 
 namespace CurrencyObserver.Queries;
 
-public class GetCurrenciesByDateQuery : IRequest<IReadOnlyList<Currency>>
-{
-    public DateTime ToDate { get; init; }
-}
+public class GetCurrenciesByDateQuery : CurrenciesByDateQuery { }

@@ -2,13 +2,13 @@
 
 namespace CurrencyObserver.DAL.Providers;
 
-public class TransactionProvider : ITransactionProvider
+public class PgSqlTransactionProvider : IPgSqlTransactionProvider
 {
-    private readonly IConnectionProvider _connectionProvider;
+    private readonly IPgSqlConnectionProvider _pgSqlConnectionProvider;
 
-    public TransactionProvider(IConnectionProvider connectionProvider)
+    public PgSqlTransactionProvider(IPgSqlConnectionProvider pgSqlConnectionProvider)
     {
-        _connectionProvider = connectionProvider;
+        _pgSqlConnectionProvider = pgSqlConnectionProvider;
     }
 
     public Task<NpgsqlTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
@@ -18,7 +18,7 @@ public class TransactionProvider : ITransactionProvider
     
     private async Task<NpgsqlTransaction> BeginTransactionInternalAsync(CancellationToken cancellationToken)
     {
-        var connection = await _connectionProvider.OpenConnectionAsync(cancellationToken);
+        var connection = await _pgSqlConnectionProvider.OpenConnectionAsync(cancellationToken);
         try
         {
             var transaction = await connection.BeginTransactionAsync(cancellationToken);

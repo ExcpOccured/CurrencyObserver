@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CurrencyObserver.DAL.Migrations;
 
-public interface IMigrationManager
+public interface IPgSqlMigrator
 {
     void ApplyMigrations(
         IPgSqlConnectionProvider pgSqlConnectionProvider,

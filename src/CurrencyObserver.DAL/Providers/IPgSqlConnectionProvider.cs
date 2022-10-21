@@ -2,7 +2,7 @@
 
 namespace CurrencyObserver.DAL.Providers;
 
-public interface IConnectionProvider
+public interface IPgSqlConnectionProvider
 {
     Task<NpgsqlConnection> OpenConnectionAsync(CancellationToken cancellationToken);
 

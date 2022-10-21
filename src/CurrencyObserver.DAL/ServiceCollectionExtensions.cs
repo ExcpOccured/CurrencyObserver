@@ -23,8 +23,8 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient();
         services.AddSingleton<ICbrClient, CbrClient>();
 
-        services.AddSingleton<IConnectionProvider, ConnectionProvider>();
-        services.AddSingleton<ITransactionProvider, TransactionProvider>();
+        services.AddSingleton<IPgSqlConnectionProvider, PgSqlConnectionProvider>();
+        services.AddSingleton<IPgSqlTransactionProvider, PgSqlTransactionProvider>();
         
         services.AddSingleton<IMigrationManager, MigrationManager>();
         services.AddSingleton<ICurrencyRepository, CurrencyRepository>();

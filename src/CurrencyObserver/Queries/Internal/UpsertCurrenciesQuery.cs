@@ -1,7 +1,7 @@
 ﻿using CurrencyObserver.Common.Models;
 using MediatR;
 
-namespace CurrencyObserver.Queries;
+namespace CurrencyObserver.Queries.Internal;
 
 public class UpsertCurrenciesQuery : IRequest
 {
