@@ -6,7 +6,7 @@ namespace CurrencyObserver.Common;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddCommon(this IServiceCollection services)
+    public static void AddSdk(this IServiceCollection services)
     {
         services.AddSingleton<AsyncReadWriteLocker>();
         services.AddSingleton<IEmbeddedResourcesManager, EmbeddedResourcesManager>();

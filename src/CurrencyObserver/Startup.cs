@@ -23,7 +23,7 @@ public class Startup
         services.AddMediatR(typeof(Startup));
         services.AddSwaggerGen();
 
-        services.AddCommon();
+        services.AddSdk();
         services.AddDatabases(Configuration);
     }
 
