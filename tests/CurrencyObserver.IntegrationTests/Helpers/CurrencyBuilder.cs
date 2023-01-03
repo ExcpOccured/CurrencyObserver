@@ -11,7 +11,7 @@ public class CurrencyBuilder
     {
         _currency = new Currency(
             IdHelper.NextId(),
-            CurrencyCode.Undefined.GetRandom(),
+            EnumHelper.GetRandom<CurrencyCode>(),
             IdHelper.NextDouble(),
             Guid.NewGuid().ToString()[..8],
             DateTime.UtcNow);
