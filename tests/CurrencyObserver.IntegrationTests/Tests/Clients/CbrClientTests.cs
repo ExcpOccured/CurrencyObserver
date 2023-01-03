@@ -14,9 +14,13 @@ public class CbrClientTests : TestBase
     [Fact]
     public async Task GetCurrencyQuotesAsync_CanReturnData()
     {
+        // Arrange
         var cbrClient = ServiceClient.GetService<ICbrClient>();
+        
+        // Act
         var quotes = await cbrClient.GetCurrencyQuotesAsync(CancellationToken.None);
 
+        // Assert
         Assert.NotNull(quotes);
         Assert.NotEmpty(quotes!.Currencies);
         
