@@ -5,12 +5,12 @@ namespace CurrencyObserver.DAL.Repositories;
 
 public interface ICurrencyRepository
 {
-    Task<List<Currency>> GetLstAsync(
+    Task<List<Currency>> GetAsync(
         NpgsqlTransaction transaction,
         DateTime? toDate,
         CancellationToken cancellationToken);
 
-    Task UpsertLstAsync(
+    Task AddOrUpdateAsync(
         NpgsqlTransaction transaction,
         IEnumerable<Currency> currencies,
         CancellationToken cancellationToken);

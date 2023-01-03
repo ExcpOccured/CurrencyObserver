@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS currency_observer.currency
     currency_code INT              NOT NULL,
     value         DOUBLE PRECISION NOT NULL,
     name          VARCHAR(128)     NOT NULL,
-    added_at      TIMESTAMP        NOT NULL
+    valid_date    TIMESTAMP        NOT NULL
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS added_at_id_index
-    ON currency_observer.currency (added_at, id);
+CREATE UNIQUE INDEX IF NOT EXISTS valid_date_id_index
+    ON currency_observer.currency (valid_date, id);
 
-CREATE INDEX IF NOT EXISTS added_at_index 
-    ON currency_observer.currency USING HASH (added_at);
+CREATE INDEX IF NOT EXISTS valid_date_index 
+    ON currency_observer.currency USING HASH (valid_date);

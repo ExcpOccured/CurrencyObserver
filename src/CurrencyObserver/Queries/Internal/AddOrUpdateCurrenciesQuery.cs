@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CurrencyObserver.Queries.Internal;
 
-public class UpsertCurrenciesQuery : IRequest
+public class AddOrUpdateCurrenciesQuery : IRequest
 {
     public IReadOnlyList<Currency> Currencies { get; init; } = null!;
 }

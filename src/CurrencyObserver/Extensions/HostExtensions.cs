@@ -1,4 +1,5 @@
-﻿using CurrencyObserver.DAL.Migrations;
+﻿using CurrencyObserver.Common.Managers;
+using CurrencyObserver.DAL.Migrations;
 
 namespace CurrencyObserver.Extensions;
 
@@ -10,10 +11,22 @@ public static class HostExtensions
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<MigrationManager>>();
         var migrationManager = scope.ServiceProvider.GetRequiredService<IMigrationManager>();
+        
+        var embeddedResourcesManager = scope.ServiceProvider.GetRequiredService<IEmbeddedResourcesManager>();
 
         try
         {
-            migrationManager.ApplyMigrations(scope.ServiceProvider, logger);
+            migrationManager.ApplyPgSqlMigrations(
+                embeddedResourcesManager,
+                scope.ServiceProvider,
+                logger);
+            
+            /*
+            migrationManager.ApplyRedisMigrations(
+                embeddedResourcesManager,
+                scope.ServiceProvider,
+                logger);
+            */
         }
         catch (Exception exception)
         {

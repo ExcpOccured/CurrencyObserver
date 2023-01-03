@@ -28,7 +28,7 @@ public class GetCurrenciesFromPgHandler : IRequestHandler<CurrenciesByDateQuery,
     {
         await using var transaction = await _pgSqlTransactionProvider.BeginTransactionAsync(cancellationToken);
         
-        var currenciesFromPg = await _currencyRepository.GetLstAsync(
+        var currenciesFromPg = await _currencyRepository.GetAsync(
             transaction,
             query.ToDate,
             cancellationToken);

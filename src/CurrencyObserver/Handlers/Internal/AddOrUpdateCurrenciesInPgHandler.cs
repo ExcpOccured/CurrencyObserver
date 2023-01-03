@@ -7,13 +7,13 @@ using MediatR;
 namespace CurrencyObserver.Handlers.Internal;
 
 [UsedImplicitly]
-public class UpsertCurrenciesToPgHandler : IRequestHandler<UpsertCurrenciesQuery>
+public class AddOrUpdateCurrenciesInPgHandler : IRequestHandler<AddOrUpdateCurrenciesQuery>
 {
     private readonly ICurrencyRepository _currencyRepository;
 
     private readonly IPgSqlTransactionProvider _pgSqlTransactionProvider;
 
-    public UpsertCurrenciesToPgHandler(
+    public AddOrUpdateCurrenciesInPgHandler(
         ICurrencyRepository currencyRepository, 
         IPgSqlTransactionProvider pgSqlTransactionProvider)
     {
@@ -22,12 +22,12 @@ public class UpsertCurrenciesToPgHandler : IRequestHandler<UpsertCurrenciesQuery
     }
 
     public async Task<Unit> Handle(
-        UpsertCurrenciesQuery query,
+        AddOrUpdateCurrenciesQuery query,
         CancellationToken cancellationToken)
     {
         await using var transaction = await _pgSqlTransactionProvider.BeginTransactionAsync(cancellationToken);
         
-        await _currencyRepository.UpsertLstAsync(
+        await _currencyRepository.AddOrUpdateAsync(
             transaction,
             query.Currencies,
             cancellationToken);

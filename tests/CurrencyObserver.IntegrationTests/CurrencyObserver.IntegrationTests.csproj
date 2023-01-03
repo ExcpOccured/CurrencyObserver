@@ -24,4 +24,8 @@
       <ProjectReference Include="..\..\src\CurrencyObserver\CurrencyObserver.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Tests\Handlers" />
+    </ItemGroup>
+
 </Project>

@@ -34,10 +34,10 @@ public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQue
 
         var currenciesFromCbrApi = await _mediator.Send(new CurrenciesFromCbrApiQuery
         {
-            Predicate = currency => DateTime.Equals(currency.AddedAt, toDate)
+            Predicate = currency => DateTime.Equals(currency.ValidDate, toDate)
         }, cancellationToken);
         
-        await _mediator.Send(new UpsertCurrenciesQuery
+        await _mediator.Send(new AddOrUpdateCurrenciesQuery
         {
             Currencies = currenciesFromCbrApi
         }, cancellationToken);

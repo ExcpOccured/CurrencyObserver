@@ -7,12 +7,11 @@ namespace CurrencyObserver.DAL.Migrations;
 
 public class MigrationManager : IMigrationManager
 {
-    public void ApplyMigrations(
+    public void ApplyPgSqlMigrations(
+        IEmbeddedResourcesManager embeddedResourcesManager,
         IServiceProvider services,
         ILogger logger)
     {
-        var embeddedResourcesManager = services.GetRequiredService<IEmbeddedResourcesManager>();
-
         var pgSqlMigrator = services.GetRequiredService<IPgSqlMigrator>();
         var pgSqlConnectionProvider = services.GetRequiredService<IPgSqlConnectionProvider>();
 
@@ -24,7 +23,13 @@ public class MigrationManager : IMigrationManager
             logger);
 
         logger.LogInformation("PostgreSQL migrations applied");
+    }
 
+    public void ApplyRedisMigrations(
+        IEmbeddedResourcesManager embeddedResourcesManager,
+        IServiceProvider services,
+        ILogger logger)
+    {
         var redisMigrator = services.GetRequiredService<IRedisMigrator>();
         var redisConnectionProvider = services.GetRequiredService<IRedisConnectionProvider>();
 

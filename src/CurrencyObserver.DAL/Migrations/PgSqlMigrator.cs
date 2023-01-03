@@ -22,15 +22,19 @@ public class PgSqlMigrator : IPgSqlMigrator
 
         using var dbConnection = pgSqlConnectionProvider.OpenConnection();
 
+        var step = 0;
         foreach (var sqlFile in assemblySqlFiles)
         {
             var sqlContent = embeddedResourcesManager.ReadEmbeddedFile(
                 assembly,
                 sqlFile);
+            
+            logger.LogInformation("Migration step - [{Step}], Command - {SqlContent}", step, sqlContent);
 
             using var sqlCommand = dbConnection.CreateCommand();
             sqlCommand.CommandText = sqlContent;
             sqlCommand.ExecuteNonQuery();
+            step += 1;
         }
     }
 }

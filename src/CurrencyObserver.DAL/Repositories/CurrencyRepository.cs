@@ -15,7 +15,7 @@ public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
 
     private const string TempTable = "temp_currency";
 
-    public async Task<List<Currency>> GetLstAsync(
+    public async Task<List<Currency>> GetAsync(
         NpgsqlTransaction transaction,
         DateTime? toDate,
         CancellationToken cancellationToken)
@@ -25,7 +25,7 @@ public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
         var whereStatement = string.Empty;
         if (toDate is not null)
         {
-            whereStatement = "WHERE added_at = @added_at";
+            whereStatement = "WHERE valid_date = @valid_date";
         }
 
         var query = $@"
@@ -42,7 +42,7 @@ FROM
 
         if (!string.IsNullOrEmpty(whereStatement))
         {
-            command.Parameters.AddWithValue("@added_at", toDate!);
+            command.Parameters.AddWithValue("@valid_date", toDate!);
         }
 
         await using var reader = await command.ExecuteReaderAsync(cts.Token);
@@ -57,7 +57,7 @@ FROM
         return currencies;
     }
 
-    public async Task UpsertLstAsync(
+    public async Task AddOrUpdateAsync(
         NpgsqlTransaction transaction,
         IEnumerable<Currency> currencies,
         CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ CREATE TEMP TABLE IF NOT EXISTS {TempTable}
     currency_code INT                   NOT NULL,
     value         DOUBLE PRECISION      NOT NULL,
     name          VARCHAR(128)          NOT NULL,
-    added_at      TIMESTAMP             NOT NULL
+    valid_date    TIMESTAMP             NOT NULL
 ) ON COMMIT DROP;
 ";
         await createTempTableCommand.ExecuteNonQueryAsync(cancellationToken);
@@ -91,7 +91,7 @@ CREATE TEMP TABLE IF NOT EXISTS {TempTable}
             .MapInteger("currency_code", currency => (int)currency.CurrencyCode)
             .MapDouble("value", currency => currency.Value)
             .MapVarchar("name", currency => currency.Name)
-            .MapTimeStamp("added_at", currency => currency.AddedAt);
+            .MapTimeStamp("valid_date", currency => currency.ValidDate);
 
         await currenciesCopyHelper.SaveAllAsync(transaction.Connection, currencies, cancellationToken);
     }
@@ -108,19 +108,19 @@ INSERT INTO currency_observer.currency (id,
                                         currency_code,
                                         value,
                                         name,
-                                        added_at)
+                                        valid_date)
 SELECT id,
        currency_code,
        value,
        name,
-       added_at
+       valid_date
 FROM {TempTable}
-ON CONFLICT (id, added_at)
+ON CONFLICT (id, valid_date)
     DO UPDATE
     SET currency_code = excluded.currency_code,
         value         = excluded.value,
         name          = excluded.name,
-        added_at      = excluded.added_at;
+        valid_date    = excluded.valid_date;
 ";
 
         await mergeCurrenciesCommand.ExecuteNonQueryAsync(cancellationToken);
@@ -141,6 +141,6 @@ ON CONFLICT (id, added_at)
     currency_code,
     value,
     name,
-    added_at
+    valid_date
 ";
 }

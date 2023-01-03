@@ -5,4 +5,5 @@ public record Currency(
     CurrencyCode CurrencyCode,
     double Value,
     string Name,
-    DateTime AddedAt) : IEntity;
+    // Displays on what date the currency exchange rate record is valid
+    DateTime ValidDate) : IEntity;

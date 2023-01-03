@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using CurrencyObserver.Common.Clients;
 using Xunit;
@@ -15,8 +16,10 @@ public class CbrClientTests : TestBase
     {
         var cbrClient = ServiceClient.GetService<ICbrClient>();
         var quotes = await cbrClient.GetCurrencyQuotesAsync(CancellationToken.None);
-        
+
         Assert.NotNull(quotes);
         Assert.NotEmpty(quotes!.Currencies);
+        
+        TestOutputHelper.WriteLine(JsonSerializer.Serialize(quotes));
     }
 }
