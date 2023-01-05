@@ -1,6 +1,6 @@
-﻿using CurrencyObserver.Common.Models;
-using CurrencyObserver.Queries.Base;
+﻿using CurrencyObserver.Abstractions;
+using CurrencyObserver.Common.Models;
 
 namespace CurrencyObserver.Queries.Internal;
 
-public class CurrenciesFiltrationQuery : EntityFiltrationQuery<Currency> { }
+public record CurrenciesFiltrationQuery : EntityFiltrationQuery<Currency> { }

@@ -1,4 +1,5 @@
-﻿using CurrencyObserver.Common.Extensions;
+﻿using CurrencyObserver.Commands.Internal;
+using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Models;
 using CurrencyObserver.Queries;
 using CurrencyObserver.Queries.Internal;
@@ -21,10 +22,10 @@ public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQue
         GetCurrenciesByDateQuery query,
         CancellationToken cancellationToken)
     {
-        var toDate = query.ToDate;
+        var toDate = query.OnDateTime;
         var currenciesFromDb = await _mediator.Send(new CurrenciesByDateQuery
         {
-            ToDate = toDate
+            OnDateTime = toDate
         }, cancellationToken);
 
         if (!currenciesFromDb.IsEmpty())
@@ -37,7 +38,7 @@ public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQue
             Predicate = currency => DateTime.Equals(currency.ValidDate, toDate)
         }, cancellationToken);
         
-        await _mediator.Send(new AddOrUpdateCurrenciesQuery
+        await _mediator.Send(new AddOrUpdateCurrenciesCommand
         {
             Currencies = currenciesFromCbrApi
         }, cancellationToken);

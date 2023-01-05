@@ -1,13 +1,15 @@
-﻿using CurrencyObserver.DAL.Providers;
+﻿using CurrencyObserver.Commands.Internal;
+using CurrencyObserver.Common.Models;
+using CurrencyObserver.DAL.Providers;
 using CurrencyObserver.DAL.Repositories;
-using CurrencyObserver.Queries.Internal;
+using CurrencyObserver.Handlers.Internal.Interfaces;
 using JetBrains.Annotations;
 using MediatR;
 
 namespace CurrencyObserver.Handlers.Internal;
 
 [UsedImplicitly]
-public class AddOrUpdateCurrenciesInPgHandler : IRequestHandler<AddOrUpdateCurrenciesQuery>
+public class AddOrUpdateCurrenciesInPgHandler : IAddOrUpdateCurrenciesInPgHandler
 {
     private readonly ICurrencyRepository _currencyRepository;
 
@@ -22,14 +24,14 @@ public class AddOrUpdateCurrenciesInPgHandler : IRequestHandler<AddOrUpdateCurre
     }
 
     public async Task<Unit> Handle(
-        AddOrUpdateCurrenciesQuery query,
+        AddOrUpdateCurrenciesCommand command, 
         CancellationToken cancellationToken)
     {
         await using var transaction = await _pgSqlTransactionProvider.BeginTransactionAsync(cancellationToken);
         
         await _currencyRepository.AddOrUpdateAsync(
             transaction,
-            query.Currencies,
+            command.Currencies,
             cancellationToken);
 
         await transaction.CommitAsync(cancellationToken);

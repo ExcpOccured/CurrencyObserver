@@ -1,3 +1,3 @@
 ﻿namespace CurrencyObserver.Queries.Internal;
 
-public class CurrenciesFromCbrApiQuery : CurrenciesFiltrationQuery { }
+public record CurrenciesFromCbrApiQuery : CurrenciesFiltrationQuery { }

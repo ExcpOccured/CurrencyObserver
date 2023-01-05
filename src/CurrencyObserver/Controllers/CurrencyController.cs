@@ -21,7 +21,7 @@ public class CurrencyController : Controller
     {
         var currencies = await _mediator.Send(new GetCurrenciesByDateQuery
         {
-            ToDate = date
+            OnDateTime = date
         });
 
         return Ok(currencies);
