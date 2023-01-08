@@ -23,14 +23,16 @@ public class GetCurrenciesFromPgHandler : IGetCurrenciesFromPgHandler
     }
 
     public async Task<IReadOnlyList<Currency>> Handle(
-        CurrenciesByDateQuery query,
+        CurrenciesFromPgQuery query,
         CancellationToken cancellationToken)
     {
         await using var transaction = await _pgSqlTransactionProvider.BeginTransactionAsync(cancellationToken);
         
         var currenciesFromPg = await _currencyRepository.GetAsync(
             transaction,
-            query.OnDateTime,
+            query.OnDate,
+            query.CurrencyCode,
+            query.Pagination,
             cancellationToken);
 
         await transaction.CommitAsync(cancellationToken);

@@ -53,8 +53,9 @@ public class Startup
     {
         services.AddMediatR(typeof(Startup));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        
-        services.AddTransient<IGetCurrenciesByDateHandler, GetCurrenciesByDateHandler>();
+
+        services.AddTransient<IGetCurrencyByCodeHandler, GetCurrencyByCodeHandler>();
+        services.AddTransient<IGetCurrenciesByDateHandler, GetCurrenciesOnDateHandler>();
         services.AddTransient<IGetCurrenciesFromCbrApiHandler, GetCurrenciesFromCbrApiHandler>();
         services.AddTransient<IAddOrUpdateCurrenciesInPgHandler, AddOrUpdateCurrenciesInPgHandler>();
     }

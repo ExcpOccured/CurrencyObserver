@@ -7,9 +7,11 @@ public interface ICurrencyRepository
 {
     Task<List<Currency>> GetAsync(
         NpgsqlTransaction transaction,
-        DateTime? toDate,
+        DateTime? onDate,
+        CurrencyCode? currencyCode,
+        Pagination? pagination,
         CancellationToken cancellationToken);
-
+    
     Task AddOrUpdateAsync(
         NpgsqlTransaction transaction,
         IEnumerable<Currency> currencies,

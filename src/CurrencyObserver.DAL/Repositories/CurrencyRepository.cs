@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Text;
+using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Hardcode;
 using CurrencyObserver.Common.Models;
 using CurrencyObserver.DAL.Extensions;
@@ -17,15 +19,37 @@ public class CurrencyRepository : PostgresRepositoryBase, ICurrencyRepository
 
     public async Task<List<Currency>> GetAsync(
         NpgsqlTransaction transaction,
-        DateTime? toDate,
+        DateTime? onDate,
+        CurrencyCode? currencyCode,
+        Pagination? pagination,
         CancellationToken cancellationToken)
     {
         using var cts = CreateCancellationTokenSource(cancellationToken);
 
-        var whereStatement = string.Empty;
-        if (toDate is not null)
+        var filters = new List<Filter>
         {
-            whereStatement = "WHERE valid_date = @valid_date";
+            onDate switch
+            {
+                null => Filter.Empty,
+                not null => Filter.WhereParameter(
+                    "valid_date = @valid_date", 
+                    "@valid_date",
+                    onDate.Value)
+            },
+            currencyCode switch
+            {
+                null => Filter.Empty,
+                not null => Filter.WhereParameter(
+                    "currency_code = @currency_code", 
+                    "@currency_code", 
+                    currencyCode.ToInt())
+            }
+        };
+
+        var paginationStatement = string.Empty;
+        if (pagination is not null)
+        {
+            paginationStatement = $"LIMIT {pagination.Limit} OFFSET {pagination.GetOffsetSize()}";
         }
 
         var query = $@"
@@ -34,16 +58,14 @@ SELECT
    {SelectFieldsLst}
 FROM
     currency_observer.currency
-{whereStatement};";
+WHERE {{0}}
+{paginationStatement};";
 
         await using var command = transaction.Connection!.CreateCommand();
 
         command.CommandText = query;
-
-        if (!string.IsNullOrEmpty(whereStatement))
-        {
-            command.Parameters.AddWithValue("@valid_date", toDate!);
-        }
+        
+        Filter.Apply(command, filters);
 
         await using var reader = await command.ExecuteReaderAsync(cts.Token);
 
@@ -88,7 +110,7 @@ CREATE TEMP TABLE IF NOT EXISTS {TempTable}
         await createTempTableCommand.ExecuteNonQueryAsync(cancellationToken);
         var currenciesCopyHelper = new PostgreSQLCopyHelper<Currency>(TempTable)
             .MapBigInt("id", currency => currency.Id)
-            .MapInteger("currency_code", currency => (int)currency.CurrencyCode)
+            .MapInteger("currency_code", currency => currency.CurrencyCode.ToInt())
             .MapDouble("value", currency => currency.Value)
             .MapVarchar("name", currency => currency.Name)
             .MapTimeStamp("valid_date", currency => currency.ValidDate);
@@ -143,4 +165,76 @@ ON CONFLICT (id, valid_date)
     name,
     valid_date
 ";
+}
+
+internal class Filter
+{
+    protected Filter(string whereString)
+    {
+        WhereString = whereString;
+    }
+
+    private string WhereString { get; }
+
+    protected virtual bool HasParameter => false;
+
+    protected virtual NpgsqlParameter CreateParameter() =>
+        throw new InvalidOperationException($"Parameterless filter: {WhereString}");
+
+    public static Filter Where(string condition)
+    {
+        return new Filter(condition);
+    }
+
+    public static Filter WhereParameter<TType>(string condition, string parameterName, TType value)
+    {
+        return new Filter<TType>(condition, parameterName, value);
+    }
+
+    public static Filter Empty { get; } = new("TRUE");
+
+    public static void Apply(NpgsqlCommand command, IReadOnlyCollection<Filter> filters)
+    {
+        var whereCondition = string.Join(
+            "\nAND ",
+            filters
+                .Where(filter => filter != Empty)
+                .Select(filter => filter.WhereString));
+        
+        if (string.IsNullOrWhiteSpace(whereCondition))
+        {
+            whereCondition = "TRUE";
+        }
+        
+        command.CommandText = string.Format(command.CommandText, whereCondition);
+        
+        foreach (var filterWithParameter in filters.Where(filter => filter.HasParameter))
+        {
+            command.Parameters.Add(filterWithParameter.CreateParameter());
+        }
+    }
+}
+
+internal class Filter<TType> : Filter
+{
+    private string ParameterName { get; }
+
+    private TType ParameterValue { get; }
+
+    public Filter(
+        string whereString,
+        string parameterName,
+        TType parameterValue)
+        : base(whereString)
+    {
+        ParameterName = parameterName;
+        ParameterValue = parameterValue;
+    }
+
+    protected override bool HasParameter => true;
+
+    protected override NpgsqlParameter CreateParameter()
+    {
+        return new NpgsqlParameter<TType>(ParameterName, ParameterValue);
+    }
 }

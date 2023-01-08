@@ -5,23 +5,25 @@ namespace CurrencyObserver.Common.Extensions;
 
 public static class EnumExtensions
 {
-    public static string GetDescription(this Enum enumVal)
+    public static string GetDescription(this Enum enumeration)
     {
-        var field = enumVal.GetType().GetField(enumVal.ToString());
+        var field = enumeration.GetType().GetField(enumeration.ToString());
 
         if (field?.GetCustomAttributes(typeof(EnumDescriptionAttribute), false)
             is not EnumDescriptionAttribute[] attributes)
         {
-            return enumVal.ToString();
+            return enumeration.ToString();
         }
 
         return !attributes.IsEmpty()
             ? attributes.First().Description
-            : enumVal.ToString();
+            : enumeration.ToString();
     }
 
     public static TEnum ToEnum<TEnum>(this int value) where TEnum : Enum =>
         IntToEnumConverter<TEnum>.Convert(value);
+
+    public static int ToInt(this Enum enumeration) => Convert.ToInt32(enumeration);
 
     private static class IntToEnumConverter<TEnum> where TEnum : Enum
     {

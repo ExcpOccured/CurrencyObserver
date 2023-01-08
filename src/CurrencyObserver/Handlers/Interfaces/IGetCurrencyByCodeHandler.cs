@@ -4,4 +4,4 @@ using CurrencyObserver.Queries;
 
 namespace CurrencyObserver.Handlers.Interfaces;
 
-public interface IGetCurrenciesByDateHandler : IQueryHandler<GetCurrenciesOnDateQuery, IReadOnlyList<Currency>> { }
+public interface IGetCurrencyByCodeHandler : IQueryHandler<GetCurrencyByCodeQuery, Currency?> { }

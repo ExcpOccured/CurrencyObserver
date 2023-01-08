@@ -10,23 +10,23 @@ using MediatR;
 namespace CurrencyObserver.Handlers;
 
 [UsedImplicitly]
-public class GetCurrenciesByDateHandler : IGetCurrenciesByDateHandler
+public class GetCurrenciesOnDateHandler : IGetCurrenciesByDateHandler
 {
     private readonly IMediator _mediator;
 
-    public GetCurrenciesByDateHandler(IMediator mediator)
+    public GetCurrenciesOnDateHandler(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public async Task<IReadOnlyList<Currency>> Handle(
-        GetCurrenciesByDateQuery query,
+        GetCurrenciesOnDateQuery query,
         CancellationToken cancellationToken)
     {
-        var onDateTime = query.OnDateTime;
-        var currenciesFromDb = await _mediator.Send(new CurrenciesByDateQuery
+        var onDateTime = query.OnDate;
+        var currenciesFromDb = await _mediator.Send(new CurrenciesFromPgQuery
         {
-            OnDateTime = onDateTime
+            OnDate = onDateTime
         }, cancellationToken);
 
         if (!currenciesFromDb.IsEmpty())
