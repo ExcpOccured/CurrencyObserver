@@ -1,6 +1,13 @@
 ﻿using CurrencyObserver.Common;
 using CurrencyObserver.Common.Mapping;
 using CurrencyObserver.DAL;
+using CurrencyObserver.Handlers;
+using CurrencyObserver.Handlers.Interfaces;
+using CurrencyObserver.Handlers.Internal;
+using CurrencyObserver.Handlers.Internal.Interfaces;
+using CurrencyObserver.Middleware;
+using CurrencyObserver.Validation;
+using FluentValidation;
 using MediatR;
 
 namespace CurrencyObserver;
@@ -20,11 +27,16 @@ public class Startup
         services.AddRouting();
         services.AddLogging();
         services.AddSingleton<IMapper, Mapper>();
-        services.AddMediatR(typeof(Startup));
         services.AddSwaggerGen();
 
         services.AddSdk();
         services.AddDatabases(Configuration);
+
+        services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+        services.AddTransient<ExceptionHandlingMiddleware>();
+
+        services.AddControllers();
+        ConfigureCqrs(services);
     }
 
     public void Configure(
@@ -33,6 +45,17 @@ public class Startup
         app.UseRouting();
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
+    }
+
+    private static void ConfigureCqrs(IServiceCollection services)
+    {
+        services.AddMediatR(typeof(Startup));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        
+        services.AddTransient<IGetCurrenciesByDateHandler, GetCurrenciesByDateHandler>();
+        services.AddTransient<IGetCurrenciesFromCbrApiHandler, GetCurrenciesFromCbrApiHandler>();
+        services.AddTransient<IAddOrUpdateCurrenciesInPgHandler, AddOrUpdateCurrenciesInPgHandler>();
     }
 }

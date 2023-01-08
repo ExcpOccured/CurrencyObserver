@@ -19,7 +19,6 @@ public static class Program
             .ConfigureWebHostDefaults(hostBuilder =>
             {
                 hostBuilder.UseStartup<Startup>();
-                hostBuilder.SuppressStatusMessages(true);
             })
             .ConfigureAppConfiguration(app =>
             {

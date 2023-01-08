@@ -1,5 +1,4 @@
 ﻿using CurrencyObserver.Commands.Internal;
-using CurrencyObserver.Common.Models;
 using CurrencyObserver.DAL.Providers;
 using CurrencyObserver.DAL.Repositories;
 using CurrencyObserver.Handlers.Internal.Interfaces;

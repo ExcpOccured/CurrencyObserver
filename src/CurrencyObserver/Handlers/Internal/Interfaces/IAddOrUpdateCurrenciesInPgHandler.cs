@@ -1,4 +1,4 @@
-﻿using CurrencyObserver.Abstractions.Interfaces;
+﻿using CurrencyObserver.Abstractions.Interfaces.Messaging;
 using CurrencyObserver.Commands.Internal;
 using MediatR;
 

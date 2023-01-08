@@ -8,7 +8,7 @@ public static class ServiceCollectionExtensions
 {
     public static void AddSdk(this IServiceCollection services)
     {
-        services.AddSingleton<AsyncReadWriteLocker>();
-        services.AddSingleton<IEmbeddedResourcesManager, EmbeddedResourcesManager>();
+        services.AddTransient<AsyncReadWriteLocker>();
+        services.AddTransient<IEmbeddedResourcesManager, EmbeddedResourcesManager>();
     }
 }

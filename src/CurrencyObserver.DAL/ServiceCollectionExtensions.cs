@@ -20,17 +20,17 @@ public static class ServiceCollectionExtensions
         services.Configure<RedisOptions>(configuration.GetSection(RedisOptions.Section));
         
         services.AddHttpClient();
-        services.AddSingleton<ICbrClient, CbrClient>();
+        services.AddTransient<ICbrClient, CbrClient>();
 
-        services.AddSingleton<IPgSqlConnectionProvider, PgSqlConnectionProvider>();
-        services.AddSingleton<IPgSqlTransactionProvider, PgSqlTransactionProvider>();
+        services.AddTransient<IPgSqlConnectionProvider, PgSqlConnectionProvider>();
+        services.AddTransient<IPgSqlTransactionProvider, PgSqlTransactionProvider>();
 
-        services.AddSingleton<IRedisConnectionProvider, RedisConnectionProvider>();
+        services.AddTransient<IRedisConnectionProvider, RedisConnectionProvider>();
         
-        services.AddSingleton<IMigrationManager, MigrationManager>();
-        services.AddSingleton<IPgSqlMigrator, PgSqlMigrator>();
-        services.AddSingleton<IRedisMigrator, RedisMigrator>();
+        services.AddTransient<IMigrationManager, MigrationManager>();
+        services.AddTransient<IPgSqlMigrator, PgSqlMigrator>();
+        services.AddTransient<IRedisMigrator, RedisMigrator>();
         
-        services.AddSingleton<ICurrencyRepository, CurrencyRepository>();
+        services.AddTransient<ICurrencyRepository, CurrencyRepository>();
     }
 }

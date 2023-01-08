@@ -6,7 +6,6 @@ using CurrencyObserver.Common.Models;
 using CurrencyObserver.Handlers.Internal.Interfaces;
 using CurrencyObserver.Queries.Internal;
 using JetBrains.Annotations;
-using MediatR;
 
 namespace CurrencyObserver.Handlers.Internal;
 

@@ -23,12 +23,12 @@ public class CurrencyController : Controller
     {
         var currencies = await _mediator.Send(new GetCurrenciesByDateQuery
         {
-            OnDateTime = onDate
+            OnDateTime = onDate,
         });
 
         if (currencies.IsEmpty())
         {
-            return NotFound($"Not found by date - {onDate.ToString(CultureInfo.InvariantCulture)}");
+            return NotFound($"Not found on date {onDate.ToString(CultureInfo.InvariantCulture)}");
         }
 
         return Ok(currencies);
