@@ -1,4 +1,6 @@
-﻿using CurrencyObserver.Common.Models;
+﻿using System.Globalization;
+using CurrencyObserver.Common.Extensions;
+using CurrencyObserver.Common.Models;
 using CurrencyObserver.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +17,19 @@ public class CurrencyController : Controller
         _mediator = mediator;
     }
 
-    [HttpGet(nameof(GetByDate))]
-    public async Task<ActionResult<List<Currency>>> GetByDate(
-        [FromQuery] DateTime date)
+    [HttpGet(nameof(GetOnDate))]
+    public async Task<ActionResult<List<Currency>>> GetOnDate(
+        [FromQuery] DateTime onDate)
     {
         var currencies = await _mediator.Send(new GetCurrenciesByDateQuery
         {
-            OnDateTime = date
+            OnDateTime = onDate
         });
+
+        if (currencies.IsEmpty())
+        {
+            return NotFound($"Not found by date - {onDate.ToString(CultureInfo.InvariantCulture)}");
+        }
 
         return Ok(currencies);
     }

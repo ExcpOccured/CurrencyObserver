@@ -1,6 +1,7 @@
 ﻿using CurrencyObserver.Commands.Internal;
 using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Models;
+using CurrencyObserver.Handlers.Interfaces;
 using CurrencyObserver.Queries;
 using CurrencyObserver.Queries.Internal;
 using JetBrains.Annotations;
@@ -9,7 +10,7 @@ using MediatR;
 namespace CurrencyObserver.Handlers;
 
 [UsedImplicitly]
-public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQuery, IReadOnlyList<Currency>>
+public class GetCurrenciesByDateHandler : IGetCurrenciesByDateHandler
 {
     private readonly IMediator _mediator;
 
@@ -22,10 +23,10 @@ public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQue
         GetCurrenciesByDateQuery query,
         CancellationToken cancellationToken)
     {
-        var toDate = query.OnDateTime;
+        var onDateTime = query.OnDateTime;
         var currenciesFromDb = await _mediator.Send(new CurrenciesByDateQuery
         {
-            OnDateTime = toDate
+            OnDateTime = onDateTime
         }, cancellationToken);
 
         if (!currenciesFromDb.IsEmpty())
@@ -33,10 +34,10 @@ public class GetCurrenciesByDateHandler : IRequestHandler<GetCurrenciesByDateQue
             return currenciesFromDb;
         }
 
-        var currenciesFromCbrApi = await _mediator.Send(new CurrenciesFromCbrApiQuery
-        {
-            Predicate = currency => DateTime.Equals(currency.ValidDate, toDate)
-        }, cancellationToken);
+        var currenciesFromCbrApi = await _mediator.Send(
+            new CurrenciesFromCbrApiQuery(
+            currency => DateTime.Equals(currency.ValidDate, onDateTime)),
+            cancellationToken);
         
         await _mediator.Send(new AddOrUpdateCurrenciesCommand
         {

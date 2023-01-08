@@ -1,3 +1,14 @@
-﻿namespace CurrencyObserver.Queries.Internal;
+﻿using CurrencyObserver.Abstractions.Interfaces;
+using CurrencyObserver.Common.Models;
 
-public record CurrenciesFromCbrApiQuery : CurrenciesFiltrationQuery { }
+namespace CurrencyObserver.Queries.Internal;
+
+public class CurrenciesFromCbrApiQuery : IQuery<IReadOnlyList<Currency>>
+{
+    public CurrenciesFromCbrApiQuery(Func<Currency, bool>? currenciesFiltrationPredicate)
+    {
+        CurrenciesFiltrationPredicate = currenciesFiltrationPredicate;
+    }
+
+    public Func<Currency, bool>? CurrenciesFiltrationPredicate { get; }
+}

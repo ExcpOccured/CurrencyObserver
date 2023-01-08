@@ -3,6 +3,7 @@ using CurrencyObserver.Common.Clients;
 using CurrencyObserver.Common.Extensions;
 using CurrencyObserver.Common.Mapping;
 using CurrencyObserver.Common.Models;
+using CurrencyObserver.Handlers.Internal.Interfaces;
 using CurrencyObserver.Queries.Internal;
 using JetBrains.Annotations;
 using MediatR;
@@ -10,7 +11,7 @@ using MediatR;
 namespace CurrencyObserver.Handlers.Internal;
 
 [UsedImplicitly]
-public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFromCbrApiQuery, IReadOnlyList<Currency>>
+public class GetCurrenciesFromCbrApiHandler : IGetCurrenciesFromCbrApiHandler
 {
     private readonly ICbrClient _cbrClient;
 
@@ -39,7 +40,7 @@ public class GetCurrenciesFromCbrApiHandler : IRequestHandler<CurrenciesFromCbrA
         return currenciesFromCbrApi
             .Currencies
             .Select(currencyFromCbrApi => _mapper.Map(cbrCurrenciesDate, currencyFromCbrApi))
-            .WhereIf(query.Predicate)
+            .WhereIf(query.CurrenciesFiltrationPredicate)
             .OrderBy(currency => currency.Id)
             .ToImmutableList();
     }

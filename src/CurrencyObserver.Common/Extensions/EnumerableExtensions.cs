@@ -2,20 +2,21 @@
 
 public static class EnumerableExtensions
 {
-    public static bool IsEmpty<T>(this IEnumerable<T> source)
+    public static bool IsEmpty<TSource>(this IEnumerable<TSource> enumerable)
     {
-        return !source.Any();
+        return !enumerable.Any();
     }
 
-    public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> sequence,
+    public static IEnumerable<TSource> WhereIf<TSource>(
+        this IEnumerable<TSource> enumerable,
         Func<TSource, bool>? filtrationPredicate)
     {
         // ReSharper disable once ConvertIfStatementToReturnStatement
         if (filtrationPredicate is null)
         {
-            return sequence;
+            return enumerable;
         }
 
-        return sequence.Where(filtrationPredicate);
+        return enumerable.Where(filtrationPredicate);
     }
 }
